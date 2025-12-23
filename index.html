@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login - Personal / Empresarial</title>
+
+  <style>
+    :root {
+      --accent: #0066cc;
+      --bg: #eef2ff;
+      --card: #ffffff;
+      --muted: #6b7280;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Arial;
+      background: linear-gradient(180deg, #eef2ff 0%, #ffffff 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 480px;
+      background: var(--card);
+      border-radius: 18px;
+      box-shadow: 0 8px 30px rgba(16, 24, 40, 0.15);
+      padding: 32px;
+      margin-top: 30px;
+    }
+
+    .brand {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 25px;
+    }
+
+    .brand img {
+      width: 150px;
+      height: auto;
+    }
+
+    .segmented {
+      display: flex;
+      background: #f1f5f9;
+      border-radius: 12px;
+      padding: 6px;
+      margin-bottom: 25px;
+    }
+
+    .segmented label {
+      flex: 1;
+      text-align: center;
+      padding: 10px 6px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #475569;
+    }
+
+    input[type="radio"] {
+      display: none;
+    }
+
+    input[type="radio"]:checked + label {
+      background: #0056b3;
+      color: white;
+      box-shadow: 0 4px 12px rgba(0, 86, 179, 0.35);
+    }
+
+    .field {
+      margin-bottom: 18px;
+    }
+
+    label.field-label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 15px;
+      border-radius: 40px;
+      border: 1px solid #d9d9d9;
+      font-size: 16px;
+      background: #f8fafc;
+    }
+
+    button.btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 40px;
+      border: none;
+      background: #e5e7eb;
+      color: #374151;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+
+    .btn-primary {
+      background: #0056b3 !important;
+      color: white !important;
+    }
+
+    .btn-green {
+      background: #0a9a32 !important;
+      color: white !important;
+    }
+
+    .help-text {
+      margin-top: 15px;
+      text-align: center;
+      color: #6b7280;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    footer {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 15px;
+      color: #3f4042;
+      font-weight: bold;
+      line-height: 22px;
+    }
+
+    /* LOADER CIRCULAR FUERA DEL BOTÓN */
+    #loader-circle {
+      width: 28px;
+      height: 28px;
+      border: 4px solid #0056b3;
+      border-top: 4px solid transparent;
+      border-radius: 50%;
+      margin: 15px auto 0;
+      display: none;
+      animation: spin 0.9s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="card">
+    <div class="brand">
+      <img src="image/logo.png" alt="Logo">
+    </div>
+
+    <form id="loginForm" onsubmit="return handleSubmit(event)">
+
+      <div class="segmented">
+        <input type="radio" id="tipo-personal" name="tipo" value="personal" checked>
+        <label for="tipo-personal">Personal</label>
+
+        <input type="radio" id="tipo-empresarial" name="tipo" value="empresarial">
+        <label for="tipo-empresarial">Empresarial</label>
+      </div>
+
+      <div class="field" id="rnc-field" style="display:none;">
+        <label class="field-label">RNC:</label>
+        <input type="text" placeholder="RNC">
+      </div>
+
+      <div class="field">
+        <label class="field-label">Usuario:</label>
+        <input type="text" placeholder="Usuario" required>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Contraseña:</label>
+        <input type="password" placeholder="Contraseña" required>
+      </div>
+
+      <div style="text-align:right; margin-top:-10px;">
+        <a href="#" style="color:#0056b3; font-weight:700; font-size:14px;">¿Olvidó su contraseña?</a>
+      </div>
+
+      <button id="btnLogin" class="btn btn-primary">Iniciar sesión</button>
+
+      <!-- LOADER ABAJO DEL BOTÓN -->
+      <div id="loader-circle"></div>
+
+      <p class="help-text">¿Necesitas acceso?</p>
+
+      <button class="btn btn-green">Regístrate</button>
+    </form>
+  </main>
+
+  <footer>
+    Inicio - Quiénes Somos - Servicios - Contacto - Soporte<br>
+    © 2025 Plataforma Empresarial
+  </footer>
+
+<script>
+  const tipoPersonal = document.getElementById("tipo-personal");
+  const tipoEmpresarial = document.getElementById("tipo-empresarial");
+  const campoRNC = document.getElementById("rnc-field");
+
+  function actualizarRNC() {
+    campoRNC.style.display = tipoEmpresarial.checked ? "block" : "none";
+  }
+
+  tipoPersonal.addEventListener("change", actualizarRNC);
+  tipoEmpresarial.addEventListener("change", actualizarRNC);
+
+  // LOADER SIN SIMULACIÓN
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    const loader = document.getElementById("loader-circle");
+
+    // Muestra la bolita y no hace nada más
+    loader.style.display = "block";
+
+    return false;
+  }
+</script>
+
+</body>
+</html>
